@@ -1,5 +1,6 @@
 import csv
 import ref
+import copy
 from Archer import Archer
 
 class TournamentResults:
@@ -53,6 +54,18 @@ class TournamentResults:
 
     def get_field(self, row, field):
         return row[self.headers[field]]
+
+    def top_eight(self):
+        top_eight = copy.deepcopy(self.divisions)
+        for division in top_eight:
+            top_eight[division].sort(reverse=True, key=self.sort_by_score)
+        for division in top_eight:
+            top_eight[division] = top_eight[division][0:10]
+        return top_eight
+        
+    
+    def sort_by_score(self, archer):
+        return archer.score
 
 
 
