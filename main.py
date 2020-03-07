@@ -1,9 +1,10 @@
 from TournamentResults import TournamentResults
 import tkinter as tk
+from tkinter import filedialog
 import ref
 
 def fileDialog():
-    filename = tkFileDialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("csv files","*.csv"),("all files","*.*")))
+    filename = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("csv files","*.csv"),("all files","*.*")))
     bracket_data = TournamentResults()
     bracket_data.load_csv(filename)
     top_eight = bracket_data.top_eight()
@@ -14,9 +15,9 @@ def fileDialog():
 
 def main():
     
-    top = Tkinter.Tk()
+    top = tk.Tk()
 
-    hello_button = Tkinter.Button(top, text ="Upload File", command = fileDialog)
+    hello_button = tk.Button(top, text ="Upload File", command = fileDialog)
     hello_button.pack()
 
     
