@@ -38,11 +38,11 @@ class TournamentResults:
                and ref.age_group in self.headers)
 
     def process_archer_row(self, row):
-        name = self.get_field(row, ref.name)
-        bow_type = self.get_field(row, ref.bow_type)
-        gender = self.get_field(row, ref.gender)
-        age_group = self.get_field(row, ref.age_group)
-        score = self.get_field(row, ref.score)
+        name = self.get_field(row, ref.name).strip()
+        bow_type = self.get_field(row, ref.bow_type).strip()
+        gender = self.get_field(row, ref.gender).strip()
+        age_group = self.get_field(row, ref.age_group).strip()
+        score = self.get_field(row, ref.score).strip()
         if (score.isdigit()):
 
             newArcher = Archer(name, bow_type, gender, age_group, score)
@@ -50,7 +50,15 @@ class TournamentResults:
 
             if division_name not in self.divisions:
                 self.divisions.update({division_name : []})
-            self.divisions[division_name].append(newArcher)
+            if self.unique(newArcher, self.divisions[division_name]):
+                self.divisions[division_name].append(newArcher)
+
+    def unique(self, newArcher, division):
+        for archer in division:
+            if (newArcher.name == archer.name and newArcher.gender == archer.gender and 
+                newArcher.bow_type == archer.bow_type and newArcher.age_group == archer.age_group):
+                return False
+        return True
        
 
     def get_field(self, row, field):
