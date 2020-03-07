@@ -43,13 +43,14 @@ class TournamentResults:
         gender = self.get_field(row, ref.gender)
         age_group = self.get_field(row, ref.age_group)
         score = self.get_field(row, ref.score)
-        newArcher = Archer(name, bow_type, gender, age_group, score)
+        if (score.isdigit()):
 
-        division_name = bow_type + " - " + gender + " - " + age_group
+            newArcher = Archer(name, bow_type, gender, age_group, score)
+            division_name = bow_type + " - " + gender + " - " + age_group
 
-        if division_name not in self.divisions:
-            self.divisions.update({division_name : []})
-        self.divisions[division_name].append(newArcher)
+            if division_name not in self.divisions:
+                self.divisions.update({division_name : []})
+            self.divisions[division_name].append(newArcher)
        
 
     def get_field(self, row, field):
@@ -60,7 +61,7 @@ class TournamentResults:
         for division in top_eight:
             top_eight[division].sort(reverse=True, key=self.sort_by_score)
         for division in top_eight:
-            top_eight[division] = top_eight[division][0:10]
+            top_eight[division] = top_eight[division][0:8]
         return top_eight
         
     
