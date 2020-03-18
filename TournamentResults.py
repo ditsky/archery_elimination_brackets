@@ -1,14 +1,18 @@
 import csv
-import ref
+import headers
 import copy
 from Archer import Archer
 
+#Class to load a csv file and organize its contents into divisions
+#and to create a bracket for the top 8 in each division
 class TournamentResults:
     
+    #Initalizes headers and divisions dictionaries
     def __init__(self):
         self.headers = {}
         self.divisions = {}
 
+    #Loads and processes a given csv file
     def load_csv(self, csv_file_path):
         with open(csv_file_path) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
@@ -25,6 +29,7 @@ class TournamentResults:
                 line_count += 1
             print("Processed " + str(line_count) + " lines.")
 
+    #Processes and stores the headers of the csv file
     def process_headers(self, row):
         header_index = 0
         for header in row:
@@ -32,17 +37,19 @@ class TournamentResults:
             self.headers.update({key : header_index})
             header_index += 1
 
+    #Checks to make sure the all necessary headers are present
     def has_required_headers(self):
-        return (ref.name in self.headers and ref.bow_type in self.headers 
-               and ref.score in self.headers and ref.gender in self.headers 
-               and ref.age_group in self.headers)
+        return (headers.name in self.headers and headers.bow_type in self.headers 
+               and headers.score in self.headers and headers.gender in self.headers 
+               and headers.age_group in self.headers)
 
+    #Processes and stores an archer data line of the csv
     def process_archer_row(self, row):
-        name = self.get_field(row, ref.name).strip()
-        bow_type = self.get_field(row, ref.bow_type).strip()
-        gender = self.get_field(row, ref.gender).strip()
-        age_group = self.get_field(row, ref.age_group).strip()
-        score = self.get_field(row, ref.score).strip()
+        name = self.get_field(row, headers.name).strip()
+        bow_type = self.get_field(row, headers.bow_type).strip()
+        gender = self.get_field(row, headers.gender).strip()
+        age_group = self.get_field(row, headers.age_group).strip()
+        score = self.get_field(row, headers.score).strip()
         if (score.isdigit()):
 
             newArcher = Archer(name, bow_type, gender, age_group, score)
@@ -53,6 +60,7 @@ class TournamentResults:
             if self.unique(newArcher, self.divisions[division_name]):
                 self.divisions[division_name].append(newArcher)
 
+    #Checks that the new archer is not already in this division
     def unique(self, newArcher, division):
         for archer in division:
             if (newArcher.name == archer.name and newArcher.gender == archer.gender and 
@@ -61,9 +69,11 @@ class TournamentResults:
         return True
        
 
+    #Returns the given field in he given row of the csv
     def get_field(self, row, field):
         return row[self.headers[field]]
 
+    #Creates a list of the top eight archers for each division 
     def top_eight(self):
         top_eight = copy.deepcopy(self.divisions)
         for division in top_eight:
@@ -72,7 +82,7 @@ class TournamentResults:
             top_eight[division] = top_eight[division][0:8]
         return top_eight
         
-    
+    #Sorts a division by archer score
     def sort_by_score(self, archer):
         return archer.score
 
