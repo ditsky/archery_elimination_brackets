@@ -1,3 +1,4 @@
+#Class for use in creating accessible fields for archer data
 class Archer:
 
     def __init__(self, name, bow_type, age_group, gender, score):
